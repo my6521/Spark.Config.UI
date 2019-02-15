@@ -142,6 +142,28 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/system',
+    component: Layout,
+    redirect: '/userList',
+    alwaysShow: true,
+    meta: {
+      title: '系统管理',
+      icon: 'decoration_fill'
+    },
+    children: [
+      {
+        path: 'userList',
+        component: () => import('@/views/system/userList.vue'),
+        name: 'userList',
+        meta: {
+          title: '用户列表',
+          icon: 'peoples',
+          noCache: true
+        }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
