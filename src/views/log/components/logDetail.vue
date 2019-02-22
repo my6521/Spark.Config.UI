@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form ref="adminForm" :model="selectedLog" label-width="100px">
+    <el-form ref="adminForm" :model="selectedLog" label-width="110px">
       <el-row>
         <el-col :span="12">
           <el-form-item label="Project" prop="ProjectName">

@@ -76,7 +76,7 @@ export const constantRouterMap = [
     alwaysShow: true,
     meta: {
       title: '日志管理',
-      icon: 'decoration_fill'
+      icon: 'rizhi'
     },
     children: [
       {
@@ -85,7 +85,7 @@ export const constantRouterMap = [
         name: 'businessLogList',
         meta: {
           title: '业务日志',
-          icon: 'list',
+          icon: 'log',
           noCache: true
         }
       },
@@ -95,7 +95,7 @@ export const constantRouterMap = [
         name: 'systemLogList',
         meta: {
           title: '系统日志',
-          icon: 'list'
+          icon: 'log'
         }
       }
     ]
@@ -107,7 +107,7 @@ export const constantRouterMap = [
     alwaysShow: true,
     meta: {
       title: '配置中心',
-      icon: 'decoration_fill'
+      icon: 'peizhi'
     },
     children: [
       {
@@ -116,7 +116,7 @@ export const constantRouterMap = [
         name: 'configList',
         meta: {
           title: '配置列表',
-          icon: 'peoples',
+          icon: 'form',
           noCache: true
         }
       },
@@ -126,30 +126,52 @@ export const constantRouterMap = [
         name: 'serviceList',
         meta: {
           title: '服务列表',
-          icon: 'peoples',
-          noCache: true
-        }
-      },
-      {
-        path: 'appList',
-        component: () => import('@/views/config/appList.vue'),
-        name: 'appList',
-        meta: {
-          title: '项目列表',
-          icon: 'peoples',
+          icon: 'form',
           noCache: true
         }
       }
     ]
   },
   {
-    path: '/system',
+    path: '/smsManagement',
+    component: Layout,
+    redirect: '/recordList',
+    alwaysShow: true,
+    meta: {
+      title: '短信管理',
+      icon: 'sms'
+    },
+    children: [
+      {
+        path: 'recordList',
+        component: () => import('@/views/sms/recordList.vue'),
+        name: 'recordList',
+        meta: {
+          title: '发送记录',
+          icon: 'message',
+          noCache: true
+        }
+      },
+      {
+        path: 'tempList',
+        component: () => import('@/views/sms/tempList.vue'),
+        name: 'tempList',
+        meta: {
+          title: '短信模板',
+          icon: 'message',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/usermanagement',
     component: Layout,
     redirect: '/userList',
     alwaysShow: true,
     meta: {
-      title: '系统管理',
-      icon: 'decoration_fill'
+      title: '用户管理',
+      icon: 'yonghu'
     },
     children: [
       {
@@ -158,7 +180,39 @@ export const constantRouterMap = [
         name: 'userList',
         meta: {
           title: '用户列表',
-          icon: 'peoples',
+          icon: 'list',
+          noCache: true
+        }
+      },
+      {
+        path: 'roleList',
+        component: () => import('@/views/system/RoleList.vue'),
+        name: 'roleList',
+        meta: {
+          title: '权限管理',
+          icon: 'form',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/appmanagement',
+    component: Layout,
+    redirect: '/appList',
+    alwaysShow: true,
+    meta: {
+      title: '应用管理',
+      icon: 'yingyong'
+    },
+    children: [
+      {
+        path: 'appList',
+        component: () => import('@/views/system/appList.vue'),
+        name: 'appList',
+        meta: {
+          title: '项目列表',
+          icon: 'list',
           noCache: true
         }
       }

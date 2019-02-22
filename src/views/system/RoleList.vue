@@ -2,7 +2,6 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form :inline="true" :model="queryParams" label-width="240">
-        <el-button type="primary" icon="el-icon-plus" size="medium" @click="add">新增</el-button>
         <el-form-item style="float:right">
           <el-form-item label="关键词">
             <el-input v-model="queryParams.Keywords" placeholder="按关键字查找" class="filter-item" @keyup.enter.native="handleFilter" />
@@ -13,17 +12,10 @@
     </div>
     <div>
       <el-table v-loading="isloading" :data="tableData" border style="width: 100%">
-        <el-table-column prop="Id" label="Id" width="40" />
+        <el-table-column prop="UserId" label="用户Id" />
         <el-table-column prop="Mobile" label="手机" />
         <el-table-column prop="UserName" label="用户名" />
-        <el-table-column label="状态">
-          <template slot-scope="scope">
-            <span v-if="scope.row.Status===0">禁用</span>
-            <span v-if="scope.row.Status===1">正常</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="AddTime" label="添加时间" />
-        <el-table-column prop="UpdateTime" label="更新时间" />
+        <el-table-column prop="AppNames" label="项目" />
         <el-table-column label="操作" fixed="right" align="center" width="150" >
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="view(scope)">编辑</el-button>
@@ -37,24 +29,24 @@
     </div>
 
     <el-dialog v-el-drag-dialog :visible.sync="editDialog" :close-on-click-modal="false" :title="dialogTitle" width="80%" >
-      <el-form :rules="rules" :model="selectData" label-width="80px" >
-
-        <el-form-item label="手机号" prop="Mobile" >
-          <el-input v-model="selectData.Mobile" auto-complete="off"/>
-        </el-form-item>
+      <el-form :model="selectData" label-width="80px" >
 
         <el-form-item label="用户名" prop="UserName">
-          <el-input v-model="selectData.UserName" auto-complete="off" />
+          <el-input v-model="selectData.UserName" disabled="disabled" auto-complete="off" />
         </el-form-item>
 
-        <el-form-item label="密码" prop="Password">
-          <el-input v-model="selectData.Password" auto-complete="off" />
-        </el-form-item>
+        <el-form-item label="手机号" prop="Mobile" >
+        <el-input v-model="selectData.Mobile" disabled="disabled" auto-complete="&quot;off&quot;/&quot;/"/></el-form-item>
 
-        <el-form-item label="状态">
-          <el-switch v-model="selectData.Status" :active-value="1" :inactive-value="0" />
+        <el-form-item label="项目" >
+          <el-select v-model="selectData.AppIds" multiple placeholder="请选择">
+            <el-option
+              v-for="item in appList"
+              :key="item.Id"
+              :label="item.Name"
+              :value="item.Id"/>
+          </el-select>
         </el-form-item>
-
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -69,18 +61,19 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/system.js'
-import { saveUser } from '@/api/system.js'
-import { deleteUserById } from '@/api/system.js'
-
+import { getRoleList } from '@/api/app.js'
+import { getAppList } from '@/api/app.js'
+import { getUserAppList } from '@/api/app.js'
+import { saveRole } from '@/api/app.js'
 export default {
-  name: 'UserList',
+  name: 'RoleList',
   data() {
     return {
       isloading: false,
       editDialog: false,
       totalSize: 0,
       tableData: [],
+      appList: [],
       dialogTitle: '',
       queryParams: {
         Keywords: '',
@@ -88,39 +81,29 @@ export default {
         PageSize: 10
       },
       selectData: {
-        Id: 0,
+        UserId: 0,
         Mobile: '',
         UserName: '',
-        Password: '',
-        Status: ''
-      },
-      rules: {
-        Mobile: [
-          { required: true, message: '该项不能为空', trigger: 'blur' }
-        ],
-        UserName: [
-          { required: true, message: '该项不能为空', trigger: 'blur' }
-        ],
-        Password: [
-          { required: true, message: '该项不能为空', trigger: 'blur' }
-        ]
+        AppIds: []
       }
     }
   },
   mounted() {
     this.loadTable()
+    getAppList({ pageSize: 9999, pageIndex: 1 }).then(res => {
+      if (res.Data != null) {
+        this.appList = res.Data.List
+      }
+    })
   },
   methods: {
     loadTable() {
       this.isloading = true
-      getUserList(this.queryParams)
+      getRoleList(this.queryParams)
         .then(res => {
           this.isloading = false
           this.tableData = res['Data']['List']
           this.totalSize = res['Data']['Total']
-        })
-        .catch(err => {
-          console.log(err)
         })
     },
     handleFilter() {
@@ -136,39 +119,29 @@ export default {
       this.queryParams.PageIndex = 1
       this.loadTable()
     },
+
     view(scope) {
+      this.isloading = true
       this.editDialog = true
-      this.dialogTitle = '编辑用户 - ' + scope.row.UserName
+      this.dialogTitle = '编辑项目权限'
       this.selectData = {
-        id: scope.row.Id,
+        UserId: scope.row.UserId,
         Mobile: scope.row.Mobile,
         UserName: scope.row.UserName,
-        Password: scope.row.Password,
-        Status: scope.row.Status
+        AppIds: []
       }
-    },
-    remove(scope) {
-      var data = { id: scope.row.Id }
-      this.$confirm('此操作风险很大，你确定继续吗?', '提示', {
-        confirmButtonText: '删库跑路',
-        cancelButtonText: '再想想',
-        type: 'warning'
-      })
-        .then(() => {
-          deleteUserById(data)
-            .then(res => {
-              this.$message({
-                type: 'success',
-                message: res.Message
-              })
-              this.editDialog = false
-              this.loadTable()
-            })
+      getUserAppList({ userId: scope.row.UserId })
+        .then(res => {
+          this.isloading = false
+          if (res.Data != null) {
+            for (var i = 0; i < res.Data.length; i++) {
+              this.selectData.AppIds.push(res.Data[i].Id)
+            }
+          }
         })
     },
     save() {
-      console.info(this.selectData)
-      saveUser(this.selectData)
+      saveRole(this.selectData)
         .then(res => {
           this.$message({
             type: 'success',
@@ -177,19 +150,12 @@ export default {
           this.editDialog = false
           this.loadTable()
         })
-    },
-    add() {
-      this.editDialog = true
-      this.dialogTitle = '新增用户'
-      this.selectData = {
-        Id: 0,
-        Mobile: '',
-        UserName: '',
-        Password: '',
-        Status: 1
-      }
     }
   }
 }
 </script>
-
+<style lang="scss">
+ .el-select{
+   display: block;
+ }
+</style>

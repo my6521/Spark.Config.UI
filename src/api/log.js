@@ -6,7 +6,7 @@ import request from '@/utils/request'
  */
 export function getLogList(params) {
   return request({
-    url: '/LogCenter/Log/GetList',
+    url: '/monitor/Log/List',
     params,
     method: 'get'
   })

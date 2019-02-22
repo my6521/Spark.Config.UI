@@ -45,7 +45,8 @@
 
 <script>
 import LangSelect from '@/components/LangSelect'
-import { loginByUsername } from '@/api/login'
+import { mapActions } from 'vuex'
+// import { loginByUsername } from '@/api/login'
 
 export default {
   name: 'Login',
@@ -80,6 +81,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions({ LoginByUsername: 'LoginByUsername' }),
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -91,18 +93,8 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          loginByUsername(this.loginForm.username, this.loginForm.password).then(res => {
+          this.LoginByUsername(this.loginForm).then(res => {
             this.loading = false
-            var time = 10800
-            localStorage.setItem('time', time)
-            var timer = window.setInterval(() => {
-              time--
-              if (time === 0) {
-                clearInterval(timer)
-                time = ''
-                localStorage.setItem('time', time)
-              }
-            })
             this.$router.push({ path: '/' })
           }).catch(() => {
             this.loading = false

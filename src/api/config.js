@@ -6,15 +6,15 @@ import request from '@/utils/request'
  */
 export function getConfigList(params) {
   return request({
-    url: '/config/MsConfig/GetConfigList',
+    url: '/monitor/Config/List',
     params,
     method: 'get'
   })
 }
 
-export function saveConfigList(data) {
+export function saveConfig(data) {
   return request({
-    url: '/config/MsConfig/SaveConfig',
+    url: '/monitor/config/Save',
     data,
     method: 'post'
   })
@@ -22,55 +22,7 @@ export function saveConfigList(data) {
 
 export function deleteConfig(data) {
   return request({
-    url: '/config/MsConfig/DeleteConfig',
-    data,
-    method: 'post'
-  })
-}
-
-export function getServiceList(params) {
-  return request({
-    url: '/config/MsService/GetServiceList',
-    params,
-    method: 'get'
-  })
-}
-
-export function saveService(data) {
-  return request({
-    url: '/config/MsService/SaveService',
-    data,
-    method: 'post'
-  })
-}
-
-export function deleteService(data) {
-  return request({
-    url: '/config/MsService/DeleteService',
-    data,
-    method: 'post'
-  })
-}
-
-export function getAppList(params) {
-  return request({
-    url: '/config/MsApp/GetAppList',
-    params,
-    method: 'get'
-  })
-}
-
-export function deleteApp(data) {
-  return request({
-    url: '/config/MsApp/DeleteApp',
-    data,
-    method: 'post'
-  })
-}
-
-export function saveApp(data) {
-  return request({
-    url: '/config/MsApp/SaveApp',
+    url: '/monitor/config/DeleteConfig',
     data,
     method: 'post'
   })

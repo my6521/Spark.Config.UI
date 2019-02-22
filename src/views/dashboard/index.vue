@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <h1>欢迎您！{{ realname }}</h1>
+    <h1>欢迎您！{{ username }}</h1>
   </div>
 </template>
 
@@ -11,11 +11,12 @@ export default {
   name: 'Dashboard',
   data() {
     return {
-      currentRole: 'adminDashboard'
+      currentRole: 'adminDashboard',
+      username: localStorage.getItem('username')
     }
   },
   computed: {
-    ...mapGetters(['realname', 'IsAdmin'])
+    ...mapGetters(['IsAdmin'])
   },
   mounted() {
 

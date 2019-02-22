@@ -9,7 +9,7 @@
         {{ $t('navbar.welcome') +':' }}
         <el-dropdown trigger="click">
           <div class="tr-item">
-            <span>{{ realname }}</span>
+            <span>{{ username }}</span>
             <i class="el-icon-caret-bottom"/>
           </div>
           <el-dropdown-menu slot="dropdown">
@@ -49,10 +49,14 @@ export default {
     Screenfull,
     LangSelect
   },
+  data() {
+    return {
+      username: localStorage.getItem('username')
+    }
+  },
   computed: {
     ...mapGetters([
-      'sidebar',
-      'realname'
+      'sidebar'
     ])
   },
   methods: {
@@ -60,8 +64,9 @@ export default {
       this.$store.dispatch('toggleSideBar')
     },
     logout() {
-      localStorage.setItem('time', '')
-      this.$router.push({ path: '/login' })
+      this.$store.dispatch('LogOut').then(() => {
+        this.$router.push({ path: '/login' })
+      })
     }
   }
 }

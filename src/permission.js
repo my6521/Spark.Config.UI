@@ -2,13 +2,14 @@ import router from './router'
 import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
+import { getToken } from '@/utils/auth'
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 const whiteList = ['/login', '/authredirect', '/404', '/401']// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
-  if (localStorage.getItem('time')) { // determine if there has token
+  if (getToken('token')) { // determine if there has token
     if (to.path === '/login') {
       next({ path: '/' })
       // next()

@@ -1,36 +1,49 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-form :inline="true" :model="queryParams" label-width="240">
-        <el-form-item label="关键词">
-          <el-input v-model="queryParams.Keywords" placeholder="按关键字查找" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-form :inline="true" :model="queryParams" label-width="240" >
+        <el-form-item style="float:right">
+
+          <el-form-item label="应用" >
+            <el-select v-model="queryParams.AppCode" placeholder="请选择">
+              <el-option
+                v-for="item in appList"
+                :key="item.Code"
+                :label="item.Name"
+                :value="item.Code"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="关键词">
+            <el-input v-model="queryParams.Keywords" placeholder="按关键字查找" class="filter-item" @keyup.enter.native="handleFilter" />
+          </el-form-item>
+          <el-form-item label="级别">
+            <el-select v-model="queryParams.Level" placeholder="请选择">
+              <el-option value="" label="全部" />
+              <el-option value="Information" label="Information" />
+              <el-option value="Debug" label="Debug" />
+              <el-option value="Error" label="Error" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="medium" @click="handleFilter">{{ $t('btns.search') }}</el-button>
+          </el-form-item>
+
         </el-form-item>
-        <el-form-item label="级别">
-          <el-select v-model="queryParams.Level" placeholder="请选择">
-            <el-option value="" label="全部" />
-            <el-option value="Information" label="Information" />
-            <el-option value="Debug" label="Debug" />
-            <el-option value="Error" label="Error" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="medium" @click="handleFilter">{{ $t('btns.search') }}</el-button>
-          <el-button type="primary" size="medium" @click="resetList">重置</el-button>
-        </el-form-item>
+
       </el-form>
 
     </div>
     <div>
       <el-table v-loading="isloading" :data="tableData" border style="width: 100%">
-        <el-table-column prop="ProjectName" label="Project" />
-        <el-table-column prop="Level" label="Level" />
-        <el-table-column prop="Method" label="Method" width="100" />
-        <el-table-column prop="Path" label="path" />
-        <el-table-column prop="Message" label="Message" width="350" show-overflow-tooltip />
-        <el-table-column prop="DateTime" label="DateTime" />
+        <el-table-column prop="ProjectName" label="项目" />
+        <el-table-column prop="Level" label="等级" />
+        <el-table-column prop="Method" label="请求方式" width="100" />
+        <el-table-column prop="Path" label="请求路径" />
+        <el-table-column prop="Message" label="内容" width="350" show-overflow-tooltip />
+        <el-table-column prop="DateTime" label="添加时间" />
         <el-table-column label="操作" fixed="right" width="100" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="view(scope)">详情</el-button>
+            <el-button type="primary" size="mini" @click="view(scope)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -70,11 +83,13 @@ export default {
         EndDate: null,
         LogType: 2
       },
-      tableData: []
+      tableData: [],
+      appList: JSON.parse(localStorage.getItem('data')).App
     }
   },
   mounted() {
     this.loadTable()
+    console.log(this.appList)
   },
   methods: {
     loadTable() {
@@ -106,8 +121,7 @@ export default {
     view(scope) {
       this.openDetail = true
       this.selectedLog = scope.row
-    },
-    resetList() {}
+    }
   }
 }
 </script>

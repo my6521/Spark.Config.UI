@@ -18,6 +18,7 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+      setToken(token)
     },
     SET_ADMIN: (state, IsAdmin) => {
       state.IsAdmin = IsAdmin
@@ -55,19 +56,21 @@ const user = {
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
           const data = response['Data']
-          commit('SET_TOKEN', data['Access_Token'])
-          setToken(data['Access_Token'])
+          localStorage.setItem('data', JSON.stringify(data))
+          commit('SET_TOKEN', data.Token.access_token)
+          commit('SET_USERNAME', data.User.UserName)
           resolve()
         }).catch(error => {
           reject(error)
         })
       })
+    },
+    LogOut() {
+      return new Promise((resolve) => {
+        removeToken()
+        resolve()
+      })
     }
-    // LogOut(){
-    //   retrun new Promise((resolve, reject)=>{
-
-    //   })
-    // }
   }
 }
 
