@@ -164,60 +164,38 @@ export const constantRouterMap = [
       }
     ]
   },
-  {
-    path: '/usermanagement',
-    component: Layout,
-    redirect: '/userList',
-    alwaysShow: true,
-    meta: {
-      title: '用户管理',
-      icon: 'yonghu'
-    },
-    children: [
-      {
-        path: 'userList',
-        component: () => import('@/views/system/userList.vue'),
-        name: 'userList',
-        meta: {
-          title: '用户列表',
-          icon: 'list',
-          noCache: true
-        }
-      },
-      {
-        path: 'roleList',
-        component: () => import('@/views/system/RoleList.vue'),
-        name: 'roleList',
-        meta: {
-          title: '权限管理',
-          icon: 'form',
-          noCache: true
-        }
-      }
-    ]
-  },
-  {
-    path: '/appmanagement',
-    component: Layout,
-    redirect: '/appList',
-    alwaysShow: true,
-    meta: {
-      title: '应用管理',
-      icon: 'yingyong'
-    },
-    children: [
-      {
-        path: 'appList',
-        component: () => import('@/views/system/appList.vue'),
-        name: 'appList',
-        meta: {
-          title: '项目列表',
-          icon: 'list',
-          noCache: true
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/usermanagement',
+  //   component: Layout,
+  //   redirect: '/userList',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '用户管理',
+  //     icon: 'yonghu'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'userList',
+  //       component: () => import('@/views/system/userList.vue'),
+  //       name: 'userList',
+  //       meta: {
+  //         title: '用户列表',
+  //         icon: 'list',
+  //         noCache: true
+  //       }
+  //     },
+  //     {
+  //       path: 'roleList',
+  //       component: () => import('@/views/system/RoleList.vue'),
+  //       name: 'roleList',
+  //       meta: {
+  //         title: '权限管理',
+  //         icon: 'form',
+  //         noCache: true
+  //       }
+  //     }
+  //   ]
+  // },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
@@ -226,4 +204,57 @@ export default new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
-
+export const asyncRouterMap = [{
+  path: '/appmanagement',
+  component: Layout,
+  redirect: '/appList',
+  alwaysShow: true,
+  meta: {
+    title: '应用管理',
+    icon: 'yingyong'
+  },
+  children: [
+    {
+      path: 'appList',
+      component: () => import('@/views/system/appList.vue'),
+      name: 'appList',
+      meta: {
+        title: '项目列表',
+        icon: 'list',
+        noCache: true
+      }
+    }
+  ]
+},
+{
+  path: '/usermanagement',
+  component: Layout,
+  redirect: '/userList',
+  alwaysShow: true,
+  meta: {
+    title: '用户管理',
+    icon: 'yonghu'
+  },
+  children: [
+    {
+      path: 'userList',
+      component: () => import('@/views/system/userList.vue'),
+      name: 'userList',
+      meta: {
+        title: '用户列表',
+        icon: 'list',
+        noCache: true
+      }
+    },
+    {
+      path: 'roleList',
+      component: () => import('@/views/system/RoleList.vue'),
+      name: 'roleList',
+      meta: {
+        title: '权限管理',
+        icon: 'form',
+        noCache: true
+      }
+    }
+  ]
+}]

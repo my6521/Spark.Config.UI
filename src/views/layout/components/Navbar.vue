@@ -18,6 +18,9 @@
                 {{ $t('navbar.dashboard') }}
               </el-dropdown-item>
             </router-link>
+            <el-dropdown-item>
+              <span style="display:block;" @click="changePassWord">修改密码</span>
+            </el-dropdown-item>
             <el-dropdown-item divided>
               <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
             </el-dropdown-item>
@@ -30,6 +33,28 @@
         </el-tooltip>
       </div>
     </div>
+    <el-dialog
+      v-el-drag-dialog
+      :visible.sync="openAdd"
+      :close-on-click-modal="false"
+      width="500px"
+      center
+      title="修改用户密码">
+      <el-form v-if="openAdd" ref="form" :rules="rule" :model="form" label-width="120px">
+        <el-form-item label="请输入旧密码" prop="OldPwd" >
+          <el-input v-model="form.OldPwd" type="password"/>
+        </el-form-item>
+        <el-form-item label="请输入新密码" prop="NewPwd">
+          <el-input v-model="form.NewPwd" type="password"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <div class="btn-group">
+          <el-button @click="openAdd=false">取 消</el-button>
+          <el-button type="primary" @click.native ="submitForm">确 定</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -40,7 +65,7 @@ import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import LangSelect from '@/components/LangSelect'
-
+import { changePwd } from '@/api/login'
 export default {
   components: {
     Breadcrumb,
@@ -51,12 +76,24 @@ export default {
   },
   data() {
     return {
-      username: localStorage.getItem('username')
+      openAdd: false,
+      form: {
+        OldPwd: '',
+        NewPwd: ''
+      },
+      rule: {
+        OldPwd: [
+          { required: true, message: '输入旧密码', trigger: 'blur' }
+        ],
+        NewPwd: [
+          { required: true, message: '输入新密码', trigger: 'blur' }
+        ]
+      }
     }
   },
   computed: {
     ...mapGetters([
-      'sidebar'
+      'sidebar', 'username'
     ])
   },
   methods: {
@@ -66,6 +103,25 @@ export default {
     logout() {
       this.$store.dispatch('LogOut').then(() => {
         this.$router.push({ path: '/login' })
+      })
+    },
+    changePassWord() {
+      this.openAdd = true
+    },
+    submitForm() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.openAdd = false
+          changePwd(this.form).then(() => {
+            this.$message({
+              type: 'success',
+              message: '修改密码成功!'
+            })
+            this.logout()
+          })
+        } else {
+          return false
+        }
       })
     }
   }

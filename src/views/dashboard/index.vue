@@ -11,12 +11,11 @@ export default {
   name: 'Dashboard',
   data() {
     return {
-      currentRole: 'adminDashboard',
-      username: localStorage.getItem('username')
+      currentRole: 'adminDashboard'
     }
   },
   computed: {
-    ...mapGetters(['IsAdmin'])
+    ...mapGetters(['IsAdmin', 'username'])
   },
   mounted() {
 

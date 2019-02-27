@@ -28,6 +28,7 @@ const user = {
     },
     SET_USERNAME: (state, name) => {
       state.username = name
+      // localStorage.setItem('username', name)
     },
     SET_REALNAME: (state, realname) => {
       state.realname = realname
@@ -67,6 +68,39 @@ const user = {
     },
     LogOut() {
       return new Promise((resolve) => {
+        removeToken()
+        resolve()
+      })
+    },
+    // 获取用户信息
+    GetUserInfo({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        getUserInfo(state.token).then(response => {
+          const data = response['Data']
+          if (!data) {
+            reject(`can not get user's promise`)
+          }
+          const UserInfo = data['User']
+          const Permissions = data['Permissions'] || []
+          commit('SET_ROLES', Permissions)
+          commit('SET_USERNAME', UserInfo['UserName'])
+          commit('SET_STATUS', UserInfo['Status'])
+          commit('SET_REALNAME', UserInfo['RealName'])
+          commit('SET_DEPNAME', UserInfo['DepName'])
+          commit('SET_PHONE', UserInfo['Phone'])
+          commit('SET_EMAIL', UserInfo['Email'])
+          commit('SET_ADMIN', UserInfo['IsAdmin'])
+          commit('SET_ROLEID', UserInfo['RoleId'])
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    // 前端 登出
+    FedLogOut({ commit }) {
+      return new Promise(resolve => {
+        commit('SET_TOKEN', '')
         removeToken()
         resolve()
       })
