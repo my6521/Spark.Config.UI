@@ -24,8 +24,9 @@
       <el-table v-loading="isloading" :data="tableData" border style="width: 100%">
         <el-table-column prop="Id" label="Id" />
         <el-table-column prop="AppName" label="项目" />
+        <el-table-column prop="ProviderName" label="服务商" />
         <el-table-column prop="Mobile" label="发送手机" />
-        <el-table-column prop="TempCode" label="模板编码" />
+        <el-table-column prop="TempId" label="模板编码" />
         <el-table-column label="状态" >
           <template slot-scope="scope">
             <span v-if="scope.row.Status===0">未发送</span>
@@ -53,8 +54,12 @@
           <el-input v-model="selectRecord.AppName" disabled="disabled" />
         </el-form-item>
 
+        <el-form-item label="服务商" >
+          <el-input v-model="selectRecord.ProviderName" disabled="disabled" />
+        </el-form-item>
+
         <el-form-item label="模板编码" >
-          <el-input v-model="selectRecord.TempCode" disabled="disabled" />
+          <el-input v-model="selectRecord.TempId" disabled="disabled" />
         </el-form-item>
 
         <el-form-item label="发送手机" >
@@ -138,10 +143,11 @@ export default {
       this.dialogTitle = '短信发送详情'
       this.selectRecord = {
         Mobile: scope.row.Mobile,
-        TempCode: scope.row.TempCode,
+        TempId: scope.row.TempId,
         AppName: scope.row.AppName,
         Status: scope.row.Status,
         Content: scope.row.Content,
+        ProviderName: scope.row.ProviderName,
         Id: scope.row.Id
       }
     },

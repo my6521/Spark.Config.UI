@@ -161,6 +161,16 @@ export const constantRouterMap = [
           icon: 'message',
           noCache: true
         }
+      },
+      {
+        path: 'providerList',
+        component: () => import('@/views/sms/providerList.vue'),
+        name: 'providerList',
+        meta: {
+          title: '短信运营商',
+          icon: 'list',
+          noCache: true
+        }
       }
     ]
   },
@@ -204,6 +214,7 @@ export default new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
+
 export const asyncRouterMap = [{
   path: '/appmanagement',
   component: Layout,
@@ -257,4 +268,5 @@ export const asyncRouterMap = [{
       }
     }
   ]
-}]
+}
+]

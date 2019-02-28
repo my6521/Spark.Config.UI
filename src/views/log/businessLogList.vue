@@ -27,7 +27,7 @@
     </div>
     <div>
       <el-table v-loading="isloading" :data="tableData" border style="width: 100%">
-        <el-table-column prop="ProjectName" label="项目" />
+        <el-table-column prop="ServiceName" label="项目" />
         <el-table-column prop="Path" label="请求路径" />
         <el-table-column prop="UserName" label="用户名" width="100" />
         <el-table-column prop="Message" label="内容" min-width="350" show-overflow-tooltip />

@@ -35,7 +35,7 @@
     </div>
     <div>
       <el-table v-loading="isloading" :data="tableData" border style="width: 100%">
-        <el-table-column prop="ProjectName" label="项目" />
+        <el-table-column prop="ServiceName" label="项目" />
         <el-table-column prop="Level" label="等级" />
         <el-table-column prop="Method" label="请求方式" width="100" />
         <el-table-column prop="Path" label="请求路径" />

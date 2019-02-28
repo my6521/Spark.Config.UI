@@ -24,3 +24,19 @@ export function saveTemp(data) {
   })
 }
 
+export function getProviderList(params) {
+  return request({
+    url: '/monitor/sms/ProviderList',
+    params,
+    method: 'get'
+  })
+}
+
+export function saveProvider(data) {
+  return request({
+    url: '/monitor/sms/SaveProvider',
+    data,
+    method: 'post'
+  })
+}
+

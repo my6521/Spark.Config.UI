@@ -59,7 +59,7 @@ const user = {
           const data = response['Data']
           localStorage.setItem('data', JSON.stringify(data))
           commit('SET_TOKEN', data.Token.access_token)
-          commit('SET_USERNAME', data.User.UserName)
+          // commit('SET_USERNAME', data.User.UserName)
           resolve()
         }).catch(error => {
           reject(error)

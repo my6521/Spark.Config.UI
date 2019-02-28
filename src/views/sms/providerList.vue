@@ -4,17 +4,6 @@
       <el-form :inline="true" :model="queryParams" label-width="240">
         <el-button type="primary" icon="el-icon-plus" size="medium" @click="add">新增</el-button>
         <el-form-item style="float:right">
-
-          <el-form-item label="应用" >
-            <el-select v-model="queryParams.AppCode" placeholder="请选择">
-              <el-option
-                v-for="item in appList"
-                :key="item.Code"
-                :label="item.Name"
-                :value="item.Code"/>
-            </el-select>
-          </el-form-item>
-
           <el-form-item label="关键词">
             <el-input v-model="queryParams.Keywords" placeholder="按关键字查找" class="filter-item" @keyup.enter.native="handleFilter" />
           </el-form-item>
@@ -26,10 +15,8 @@
     <div>
       <el-table v-loading="isloading" :data="tableData" border style="width: 100%">
         <el-table-column prop="Id" label="Id" />
-        <el-table-column prop="AppName" label="项目" />
         <el-table-column prop="Name" label="名称" />
-        <el-table-column prop="TempId" label="模板编码" />
-        <el-table-column prop="Content" label="模板内容" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="Code" label="编码" />
         <el-table-column label="状态" >
           <template slot-scope="scope">
             <span v-if="scope.row.Status===0">禁用</span>
@@ -51,32 +38,18 @@
     </div>
 
     <el-dialog v-el-drag-dialog :visible.sync="editDialog" :close-on-click-modal="false" :title="dialogTitle" width="80%" >
-      <el-form :model="selectTemp" label-width="80px" >
-
-        <el-form-item label="项目" >
-          <el-select v-model="selectTemp.AppCode" placeholder="请选择">
-            <el-option
-              v-for="item in appList"
-              :key="item.Code"
-              :label="item.Name"
-              :value="item.Code"/>
-          </el-select>
-        </el-form-item>
+      <el-form :model="selectProvider" label-width="80px" >
 
         <el-form-item label="名称" prop="Name">
-          <el-input v-model="selectTemp.Name" auto-complete="off" placeholder="请输入模板名称" />
+          <el-input v-model="selectProvider.Name" auto-complete="off" placeholder="请输入服务商名称" />
         </el-form-item>
 
-        <el-form-item label="模板编码" prop="TempId">
-          <el-input v-model="selectTemp.TempId" auto-complete="off" placeholder="请输入模板编码" />
-        </el-form-item>
-
-        <el-form-item label="模板内容" >
-          <el-input v-model="selectTemp.Content" type="textarea" placeholder="请输入模板内容" />
+        <el-form-item label="编码" prop="Code">
+          <el-input v-model="selectProvider.Code" auto-complete="off" placeholder="请输入服务商编码" />
         </el-form-item>
 
         <el-form-item label="状态">
-          <el-switch v-model="selectTemp.Status" :active-value="1" :inactive-value="0" />
+          <el-switch v-model="selectProvider.Status" :active-value="1" :inactive-value="0" />
         </el-form-item>
 
       </el-form>
@@ -92,32 +65,27 @@
 </template>
 
 <script>
-import { getTempList } from '@/api/sms.js'
-import { saveTemp } from '@/api/sms.js'
+import { getProviderList } from '@/api/sms.js'
+import { saveProvider } from '@/api/sms.js'
 export default {
-  name: 'TempList',
+  name: 'ProviderList',
   data() {
     return {
       isloading: false,
       editDialog: false,
       totalSize: 0,
       tableData: [],
-      appList: JSON.parse(localStorage.getItem('data')).App,
       dialogTitle: '',
       queryParams: {
         Keywords: '',
         PageIndex: 1,
-        PageSize: 100,
-        AppCode: ''
+        PageSize: 100
       },
-      selectTemp: {
-        Content: '',
-        Status: 1,
+      selectProvider: {
+        Status: 0,
         Name: '',
-        AppCode: '',
-        AppName: '',
         Id: 0,
-        TempId: ''
+        Code: ''
       }
     }
   },
@@ -127,7 +95,7 @@ export default {
   methods: {
     loadTable() {
       this.isloading = true
-      getTempList(this.queryParams)
+      getProviderList(this.queryParams)
         .then(res => {
           this.isloading = false
           this.tableData = res['Data']['List']
@@ -149,19 +117,16 @@ export default {
     },
     view(scope) {
       this.editDialog = true
-      this.dialogTitle = '编辑模板-' + scope.row.Name
-      this.selectTemp = {
-        Content: scope.row.Content,
-        TempId: scope.row.TempId,
+      this.dialogTitle = '编辑短信服务商-' + scope.row.Name
+      this.selectProvider = {
         Name: scope.row.Name,
-        AppName: scope.row.AppName,
-        AppCode: scope.row.AppCode,
+        Code: scope.row.Code,
         Status: scope.row.Status,
         Id: scope.row.Id
       }
     },
     save() {
-      saveTemp(this.selectTemp)
+      saveProvider(this.selectProvider)
         .then(res => {
           this.$message({
             type: 'success',
@@ -174,14 +139,11 @@ export default {
     },
     add() {
       this.editDialog = true
-      this.dialogTitle = '新增模板'
-      this.selectTemp = {
-        Content: '',
+      this.dialogTitle = '新增短信服务商'
+      this.selectProvider = {
         Name: '',
-        AppCode: '',
-        TempId: '',
+        Code: '',
         Status: 0,
-        AppName: '',
         Id: 0
       }
     }
