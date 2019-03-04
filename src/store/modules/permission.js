@@ -5,27 +5,22 @@ import { asyncRouterMap, constantRouterMap } from '@/router'
  * @param roles
  * @param route
  */
-function hasPermission(roles, route) {
-  if (route.meta && route.meta.code) {
-    return roles.some(role => {
-      // 模糊父级菜单
-      const roleParentCode = role.MenuCode.slice(0, 2)
-      route.meta.permissions = role['Permissions']
-      return route.meta.code === role.MenuCode || route.meta.code === roleParentCode
-    })
+function hasPermission(route) {
+  if (route.meta) {
+    return !route.meta.isAdmin
   } else {
-    return false
+    return true
   }
 }
 
 /**
  * 递归过滤异步路由表，返回符合用户角色权限的路由表
  */
-function filterAsyncRouter(asyncRouterMap, roles) {
+function filterAsyncRouter(asyncRouterMap) {
   const accessedRouters = asyncRouterMap.filter(route => {
-    if (hasPermission(roles, route)) {
+    if (hasPermission(route)) {
       if (route.children && route.children.length) {
-        route.children = filterAsyncRouter(route.children, roles)
+        route.children = filterAsyncRouter(route.children)
       }
       return true
     }

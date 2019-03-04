@@ -6,6 +6,7 @@
 
           <el-form-item label="应用" >
             <el-select v-model="queryParams.AppCode" placeholder="请选择">
+              <el-option label="全部" value=""/>
               <el-option
                 v-for="item in appList"
                 :key="item.Code"
@@ -75,7 +76,6 @@ export default {
         Keywords: '',
         PageIndex: 1,
         PageSize: 10,
-        Project: null,
         Level: null,
         UserName: null,
         RequestPath: null,

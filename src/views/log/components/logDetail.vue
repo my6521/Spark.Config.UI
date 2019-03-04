@@ -3,7 +3,7 @@
     <el-form ref="adminForm" :model="selectedLog" label-width="110px">
       <el-row>
         <el-col :span="12">
-          <el-form-item label="Project" prop="ProjectName">
+          <el-form-item label="ServiceName" prop="ServiceName">
             {{ selectedLog.ProjectName }}
           </el-form-item>
         </el-col>

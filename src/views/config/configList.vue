@@ -7,6 +7,7 @@
         <el-form-item style="float:right">
           <el-form-item label="应用" >
             <el-select v-model="queryParams.AppCode" placeholder="请选择">
+              <el-option label="全部" value=""/>
               <el-option
                 v-for="item in appList"
                 :key="item.Code"

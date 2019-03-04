@@ -98,8 +98,13 @@ export default {
       getProviderList(this.queryParams)
         .then(res => {
           this.isloading = false
-          this.tableData = res['Data']['List']
-          this.totalSize = res['Data']['Total']
+          if (res != null && res['Data'] != null) {
+            this.tableData = res['Data']['List']
+            this.totalSize = res['Data']['Total']
+          } else {
+            this.tableData = []
+            this.totalSize = 0
+          }
         })
     },
     handleFilter() {
