@@ -18,7 +18,7 @@ router.beforeEach((to, from, next) => {
     } else {
       // store.commit('SET_ROUTERS', router)
       // next()
-      if (!store.getters.username) { // 判断当前用户是否已拉取完user_info信息
+      if (!store.getters.userName) { // 判断当前用户是否已拉取完user_info信息
         store.dispatch('GetUserInfo').then(res => { // 拉取user_info
           const isAdmin = res['Data']['User']['IsAdmin']
           const roles = res['Data']['Permissions'] || [] // 修改了框架作者的思路 这里是更加role 去匹配的code
